@@ -1,19 +1,29 @@
-import streamlit as st
-uploaded_file = st.file_uploader("アクセスログをアップロードしてください。")
-
 import pandas as pd
-if uploaded_file is not None:
-    df = pd.read_csv(
-        uploaded_file,
-        sep=r'\s(?=(?:[^"]*"[^"]*")*[^"]*$)(?![^\[]*\])',
-        engine='python',
-        na_values='-',
-        header=None)
 
-st.markdown('### アクセスログ（先頭5件）')
-st.write(df.head(5))
+# ダミーデータをDataFrameに変換
+data = {'日付': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05'],
+    '体重': [70, 71, 70.5, 70.2, 70.8],
+    '体脂肪率': [20, 19.5, 19, 18.5, 18]}
+df = pd.DataFrame(data)
 
-st.set_page_config(page_title="メインページ", page_icon='icon.png')
-st.title("Multiple OSS Access Log Analyzer")
+# グラフの描画
+fig, ax1 = plt.subplots()
 
-st.map()
+# 体重の推移を折れ線グラフで表示
+ax1.plot(df['日付'], df['体重'], color='tab:blue')
+ax1.set_xlabel('日付')
+ax1.set_ylabel('体重', color='tab:blue')
+ax1.tick_params(axis='y', labelcolor='tab:blue')
+
+# 体脂肪率を棒グラフで表示
+ax2 = ax1.twinx()
+ax2.bar(df['日付'], df['体脂肪率'], color='tab:orange', alpha=0.5)
+ax2.set_ylabel('体脂肪率', color='tab:orange')
+ax2.tick_params(axis='y', labelcolor='tab:orange')
+
+# グラフのタイトルと軸の回転
+plt.title('体重と体脂肪率の推移')
+plt.xticks(rotation=45)
+
+# グラフを表示
+st.pyplot(fig)
