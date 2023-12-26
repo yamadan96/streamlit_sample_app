@@ -1,31 +1,28 @@
-import pandas as pd
-import matplotlib.pyplot as plt
 import streamlit as st
+import pandas as pd
+import numpy as np
 
-# ダミーデータをDataFrameに変換
-data = {'日付': ['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04', '2022-01-05'],
-    '体重': [70, 71, 70.5, 70.2, 70.8],
-    '体脂肪率': [20, 19.5, 19, 18.5, 18]}
-df = pd.DataFrame(data)
+# データの読み込み
+# データの作成
+data = pd.DataFrame({
+    'A': np.random.randint(0, 100, 10),
+    'B': np.random.randint(0, 100, 10),
+    'C': np.random.randint(0, 100, 10)
+})
 
-# グラフの描画
-fig, ax1 = plt.subplots()
+# データの表示
+st.dataframe(data)
 
-# 体重の推移を折れ線グラフで表示
-ax1.plot(df['日付'], df['体重'], color='tab:blue')
-ax1.set_xlabel('日付')
-ax1.set_ylabel('体重', color='tab:blue')
-ax1.tick_params(axis='y', labelcolor='tab:blue')
+# データの統計情報の表示
+st.write(data.describe())
 
-# 体脂肪率を棒グラフで表示
-ax2 = ax1.twinx()
-ax2.bar(df['日付'], df['体脂肪率'], color='tab:orange', alpha=0.5)
-ax2.set_ylabel('体脂肪率', color='tab:orange')
-ax2.tick_params(axis='y', labelcolor='tab:orange')
+# グラフの表示
+st.line_chart(data)
 
-# グラフのタイトルと軸の回転
-plt.title('体重と体脂肪率の推移')
-plt.xticks(rotation=45)
 
-# グラフを表示
-st.pyplot(fig)
+# ランダムな場所のマップ表示
+random_lat = np.random.uniform(-90, 90)
+random_lon = np.random.uniform(-180, 180)
+data['LAT'] = random_lat
+data['LON'] = random_lon
+st.map(data)
